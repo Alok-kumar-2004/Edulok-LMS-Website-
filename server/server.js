@@ -9,11 +9,11 @@ const PORT = process.env.PORT || 5000;
 
 const MONGO_URI = process.env.MONGO_URI
 
-cors({
+app.use(cors({
     origin : process.env.CLIENT_URL,
     methods: ["GET","POST","DELETE","PUT"],
     allowedHeaders : ['Content-Type' , 'Authorization']
-})
+}))
 
 app.use(express.json());
 mongoose.connect(MONGO_URI)
@@ -23,7 +23,7 @@ mongoose.connect(MONGO_URI)
 
 // routes Config
 
-app.use('./auth',authRoutes)
+app.use('/auth',authRoutes)
 app.use((err,req,res,next)=>{
     console.log(err.stack);
     res.status(500).json({
