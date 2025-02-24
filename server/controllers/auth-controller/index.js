@@ -39,7 +39,9 @@ const registerUser = async(req ,res)=>{
             userName:checkUser.userName,
             userEmail:checkUser.userEmail,
             role:checkUser.role
-        },'JWT_SECRET',{expiresIn:'120m'})
+        },
+        process.env.JWT_SECRET,
+        {expiresIn:'120m'})
 
         res.status(200).json({
             success :true,

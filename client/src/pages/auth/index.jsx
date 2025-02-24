@@ -62,7 +62,7 @@ function Auth() {
                 buttonText="Sign In"
                 formData={signInFormData}
                 setFormData={setSignInFormData}
-                isButtonDisabled={!checkIfSignInFormIsValid()}
+                isButtonDisabled={!checkIfSignInFormIsValid}
                 handleSubmit={handleLoginUser}
               />
               </Card>
