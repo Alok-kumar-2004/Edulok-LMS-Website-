@@ -46,7 +46,7 @@ const  getCourseDetailsById = async (req,res) => {
                 message : 'Course not found !'
             })
         }
-        res.status.json({
+        res.status(200).json({
             success : true,
             data : CourseDetails
         })
@@ -62,7 +62,8 @@ const updateCourseById = async (req,res) => {
     try {
         const {id} = req.params
         const updatedCourseData = req.body
-        const updateCourse = await Course.findByIdAndUpdate(id,updatedCourseData , {new : true} )
+        const updateCourse = await Course.findByIdAndUpdate(id,updatedCourseData , 
+        {new : true} )
         if(!updateCourse){
             return res.status(404).json({
                 success : false,

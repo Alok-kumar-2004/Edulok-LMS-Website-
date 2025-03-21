@@ -1,7 +1,7 @@
 import { Button, Card, Text } from "@radix-ui/themes";
 import { useContext } from "react";
 import { InstructorContext } from "@/context/instructor-context";
-import { mediaUploadService } from "@/services";
+import { mediaDeleteService, mediaUploadService } from "@/services";
 import MediaProgressbar from "@/components/media-progress-bar";
 
 function CourseSettings() {
@@ -12,6 +12,8 @@ function CourseSettings() {
     setMediaUploadProgress,
     mediaUploadProgressPercentage,
     setMediaUploadProgressPercentage,
+    // courseCurriculumFormData,
+    // setCourseCurriculumFormData
   } = useContext(InstructorContext);
   async function handleImageUploadChange(event) {
     const selectedImage = event.target.files[0];
@@ -37,6 +39,27 @@ function CourseSettings() {
       }
     }
   }
+  // async function handleImageEdit(currentIndex){
+  //       try {
+  //         let copycourseLandingFormData = [...courseLandingFormData];
+  //         const getCurrentImage = copycourseLandingFormData[currentIndex].image;
+          
+  //         const deleteCurrentMediaResponse = await mediaDeleteService(getCurrentImage);
+    
+  //         if (deleteCurrentMediaResponse?.success) {
+  //           copycourseLandingFormData[currentIndex] = {
+  //                 ...copycourseLandingFormData[currentIndex],
+  //                 videoUrl: "",
+  //                 public_id: "",
+  //             };
+  //             setCourseLandingFormData(copycourseLandingFormData);
+  //         } else {
+  //             console.error("Failed to delete photo");
+  //         }
+  //     } catch (error) {
+  //         console.error("Error replacing photo:", error);
+  //     }
+  // }
   return (
     <div>
       <Card className="p-6 shadow-md">

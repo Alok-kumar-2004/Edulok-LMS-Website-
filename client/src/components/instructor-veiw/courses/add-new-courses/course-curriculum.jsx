@@ -2,12 +2,14 @@ import MediaProgressbar from "@/components/media-progress-bar";
 import VideoPlayer from "@/components/video-player";
 import { courseCurriculumInitialFormData } from "@/config";
 import { InstructorContext } from "@/context/instructor-context";
-import { mediaDeleteService, mediaUploadService } from "@/services";
+import { mediaBulkUploadService, mediaDeleteService, mediaUploadService } from "@/services";
 import { Label } from "@radix-ui/react-label";
 import { Button, Card, Switch,Text} from "@radix-ui/themes";
-import { useContext } from "react";
+import { Upload } from "lucide-react";
+import { useContext, useRef } from "react";
 
 function CourseCurriculum() {
+  const bulkUploadref = useRef(null)
   const {
     courseCurriculumFormData,
     setCourseCurriculumFormData,
@@ -46,7 +48,6 @@ function CourseCurriculum() {
     if (selectedFile) {
       const videoFormData = new FormData();
       videoFormData.append("file", selectedFile);
-
       try {
         setMediaUploadProgress(true);
         const response = await mediaUploadService(
@@ -97,12 +98,84 @@ function CourseCurriculum() {
       console.error("Error replacing video:", error);
   }
 }
+function handleOpenBulkUpload(){
+  bulkUploadref.current?.click()
+}
+function areAllCourseCurriculumFormDataObjectEmpty(arr){
+  return arr.every((obj)=>{
+    return Object.entries(obj).every(([key,value])=>{
+      if(typeof value ==='boolean'){
+        return true;
+      }
+      return value === ''
+    })
+  })
+}
+async function handleBulkUploadMedia(event){
+  const SelectedFiles =  Array.from(event.target.files)
+  const bulkFormData= new FormData()
+  SelectedFiles.forEach(fileItem => bulkFormData.append('files',fileItem))
+  try {
+    setMediaUploadProgress(true)
+    const response = await mediaBulkUploadService(
+      bulkFormData,setMediaUploadProgressPercentage
+    )
+    console.log(response, "bulk");
+    if(response?.success){
+      let copycourseCurriculumFormData = areAllCourseCurriculumFormDataObjectEmpty(courseCurriculumFormData) ? [] : [...courseCurriculumFormData];
+      copycourseCurriculumFormData = [
+        ...copycourseCurriculumFormData, 
+        ...response?.data.map((item, index) => ({
+          videoUrl: item?.url,
+          public_id: item?.public_id ,
+          title: `Lecture ${copycourseCurriculumFormData.length + (index + 1)}`,
+          freePreview: false,
+        })),
+      ];
+      setCourseCurriculumFormData(copycourseCurriculumFormData)
+      setMediaUploadProgress(false)
+    }
+  } catch (error) {
+    console.log(error); 
+  }
+}
+async function handleDeleteLecture(currentIndex) {
+  let copycourseCurriculumFormData = [...courseCurriculumFormData]
+  const getCurrentSelectedVideoPublicId = copycourseCurriculumFormData[currentIndex].public_id
+
+  const response = await mediaDeleteService(getCurrentSelectedVideoPublicId)
+  if(response?.success){
+    copycourseCurriculumFormData = copycourseCurriculumFormData.filter((_,index)=>index !==currentIndex)
+    setCourseCurriculumFormData(copycourseCurriculumFormData)
+  }
+}
+
   return (
     <Card className="p-6 shadow-md">
-      <div className="mb-4">
+      <div className="mb-4 flex flex-row justify-between">
         <Text as="h3" size="5" weight="bold">
           Create Course Curriculum
         </Text>
+        <div>
+          <input
+          type="file"
+          ref={bulkUploadref}
+          accept="video/*"
+          multiple
+          className="hidden"
+          id="bulk-upload"
+          onChange={handleBulkUploadMedia}
+          />
+          <Button
+          htmlFor='bulk-upload'
+          variant="outline"
+          className="cursor-pointer"
+          onClick={handleOpenBulkUpload}
+          >
+            <Upload className="w-4 h-5 mr-2"/>
+            Bulk Upload
+          </Button>  
+        </div>
       </div>
       <Button disabled={!isCourseCurriculumFormDataValid()|| mediaUploadProgress } onClick={handleNewLecture} className="mb-4">
         Add Lecture
@@ -145,7 +218,7 @@ function CourseCurriculum() {
                     height="200px"
                   />
                   <Button onClick={()=>handleReplaceVideo(index)}> Replace Video</Button>
-                  <Button color='red'> Delete Video</Button>
+                  <Button onClick={()=>{handleDeleteLecture(index)}} color='red'> Delete Video</Button>
                 </div>
               ) : (
                 <input

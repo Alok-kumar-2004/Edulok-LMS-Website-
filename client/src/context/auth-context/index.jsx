@@ -27,8 +27,8 @@ export default function AuthProvider({children}){
     async function handleLoginUser(event) {
         event.preventDefault()
         const data = await loginService(signInFormData);
-
         console.log(data);
+        
         if(data.success){
             // console.log(data);
             sessionStorage.setItem('accessToken',JSON.stringify(data.data.accessToken))
@@ -77,7 +77,7 @@ export default function AuthProvider({children}){
             });
         }
     useEffect(()=>{
-        checkAuthUser();
+      checkAuthUser();
     },[])
     console.log(auth);
     
@@ -95,3 +95,5 @@ export default function AuthProvider({children}){
     </AuthContext.Provider>
     )
 }
+
+

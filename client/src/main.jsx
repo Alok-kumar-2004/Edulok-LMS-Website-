@@ -7,6 +7,7 @@ import { Theme } from '@radix-ui/themes';
 import { BrowserRouter } from 'react-router-dom';
 import AuthProvider from './context/auth-context';
 import InstructorProvider from './context/instructor-context/index.jsx';
+import StudentProvider from './context/student-context';
 
 
 createRoot(document.getElementById('root')).render(
@@ -14,7 +15,9 @@ createRoot(document.getElementById('root')).render(
   <Theme>
    <AuthProvider>
     <InstructorProvider>
-      <App/>
+      <StudentProvider>
+        <App/>
+      </StudentProvider>
     </InstructorProvider>
    </AuthProvider>
   </Theme>

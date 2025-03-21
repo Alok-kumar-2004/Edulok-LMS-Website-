@@ -10,6 +10,11 @@ import StudentViewCommonLayout from './components/student-veiw/common-layout'
 import StudentHomePage from './pages/student/home'
 import NotFoundPage from './pages/not-found'
 import AddNewCoursePage from './pages/instructor/add-new-course'
+import StudentViewCoursesPage from './pages/student/courses'
+import StudentViewCourseDetailsPage from './pages/student/course-details'
+import StudentCoursesPage from './pages/student/my-courses'
+import PaypalPaymentReturnPage from './pages/student/payment-return'
+import StudentVeiwCourseProgressPage from './pages/student/course-progress'
 
 
 function App() {
@@ -78,7 +83,16 @@ function App() {
 
         <Route path='home' element={<StudentHomePage/>}/>
         <Route path='' element={<StudentHomePage/>}/>
+        <Route path='courses' element={<StudentViewCoursesPage/>}/>
+        <Route path='course/details/:id' element={<StudentViewCourseDetailsPage/>}/>
+
+
+
+        <Route path='payment-return' element={<PaypalPaymentReturnPage/>}/>
+        <Route path='student-courses' element={<StudentCoursesPage/>}/> 
+        <Route path='course-progress/:id' element={<StudentVeiwCourseProgressPage/>}/>
       </Route>
+
       <Route path ="*" element={<NotFoundPage/>}/>
 
       

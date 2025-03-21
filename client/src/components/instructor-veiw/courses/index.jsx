@@ -1,16 +1,25 @@
+import { courseCurriculumInitialFormData, courseLandingInitialFormData } from "@/config";
+import { InstructorContext } from "@/context/instructor-context";
 import { Pencil1Icon } from "@radix-ui/react-icons";
 import { Button, Card, Table } from "@radix-ui/themes";
 import { TrashIcon } from "lucide-react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 function InstructorCourses({ listOfCourses }) {
   const navigate = useNavigate();
+  const {setCourseCurriculumFormData,setCourseLandingFormData,setCurrentEditedCourseId} = useContext(InstructorContext)
   return (
     <Card className="p-6 shadow-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-3xl font-extrabold">All Courses</h2>
         <Button
-          onClick={() => navigate("/instructor/create-new-course")}
+          onClick={() =>{
+            setCurrentEditedCourseId(null)
+            navigate("/instructor/create-new-course")
+            setCourseCurriculumFormData(courseCurriculumInitialFormData)
+            setCourseLandingFormData(courseLandingInitialFormData)
+          }}
           className="px-6 py-3"
         >
           Create New Course
