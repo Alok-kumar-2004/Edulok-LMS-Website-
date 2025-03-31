@@ -84,6 +84,16 @@ export async function updateCourseByIdService(id, formData) {
   return data;
 }
 
+export async function deleteCourseByIdService(id) {
+  try {
+    const { data } = await axiosInstance.delete(`/instructor/course/delete/course/${id}`);
+    return data;
+  } catch (error) {
+    console.error("Delete Course Error:", error.response?.data || error.message);
+    throw error;
+  }
+}
+
 export async function mediaBulkUploadService(formData, onProgressCallback) {
   try {
     const response = await axiosInstance.post("/media/bulk-upload", formData, {
@@ -157,4 +167,29 @@ export async function getCurrentCourseProgressService(userId,courseId) {
   const {data} = await axiosInstance.get(`/student/course-progress/get/${userId}/${courseId}`)
 
   return data
+}
+
+export async function markLectureAsViewedService(userId, courseId, lectureId) {
+  const { data } = await axiosInstance.post(
+    `/student/course-progress/mark-lecture-viewed`,
+    {
+      userId,
+      courseId,
+      lectureId,
+    }  
+  );
+
+  return data;
+}
+
+export async function resetCourseProgressService(userId, courseId) {
+  const { data } = await axiosInstance.post(
+    `/student/course-progress/reset-progress`,
+    {
+      userId,
+      courseId,
+    }
+  );
+
+  return data;
 }

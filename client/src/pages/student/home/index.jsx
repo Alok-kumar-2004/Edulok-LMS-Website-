@@ -3,16 +3,42 @@ import banner from '../../../assets/image/banner.png'
 import { Button } from '@radix-ui/themes';
 import { useContext, useEffect } from 'react';
 import { StudentContext } from '@/context/student-context';
-import { fetchStudentViewCourseListService } from '@/services';
+import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } from '@/services';
+import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '@/context/auth-context';
 
 function StudentHomePage() {
     const {studentCoursesList,setStudentCoursesList} = useContext(StudentContext)
+    const navigate = useNavigate()
+    const auth = useContext(AuthContext)
+
    async function fetchAllStudentViewCourses(){
       const response = await fetchStudentViewCourseListService();
       console.log(response);
       if (response?.success) setStudentCoursesList(response?.data);
     }
-    
+    async function handleCourseNavigate(getCurrentCourseId) {
+      const response = await checkCoursePurchaseInfoService(getCurrentCourseId,auth?.user?._id)
+  
+      console.log(response);
+      if(response?.success){
+        if(response?.data){
+          navigate(`/course-progress/${getCurrentCourseId}`)
+        }else{
+          navigate(`/course/details/${getCurrentCourseId}`)
+        }
+      }
+      
+    }
+    function handleNaviagteToCoursePage(categoryId) {
+      console.log(categoryId);
+      sessionStorage.removeItem('filters')
+      const currentFilters = {
+        category : [categoryId]
+      }
+      sessionStorage.setItem('filters',JSON.stringify(currentFilters))
+      navigate('/courses')
+    }
 
     useEffect(()=>{
       fetchAllStudentViewCourses()
@@ -41,7 +67,9 @@ function StudentHomePage() {
             {
                 courseCategories.map(categoryItem =>
                   <Button className='justify-start' variant='outline'
-                    key={categoryItem.id}>
+                    key={categoryItem.id}
+                    onClick={()=>handleNaviagteToCoursePage(categoryItem.id)}
+                    >
                       {categoryItem.label}
                   </Button>
                 )
@@ -56,6 +84,7 @@ function StudentHomePage() {
             studentCoursesList.map(courseItem => 
               <div 
               key={courseItem.id}
+              onClick={() => handleCourseNavigate(courseItem?._id)}
               className='border rounded-lg overflow-hidden shadow cursor-pointer'>
                 <img 
                 src={courseItem.image}
@@ -64,13 +93,19 @@ function StudentHomePage() {
                 className='w-full h-40 object-cover'
                 />
                 <div>
-                  <h3 className='font-bold mb-2'>{courseItem?.title}</h3>
-                  <p className='text-sm text-gray-700 mb-2'>{courseItem.instructorName}</p>
-                  <p className='font-bold text-[16px]'>${courseItem?.pricing}</p>
+                  <h3 className='font-bold mb-2'>
+                    {courseItem?.title}
+                  </h3>
+                  <p className='text-sm text-gray-700 mb-2'>
+                    {courseItem.instructorName}
+                  </p>
+                  <p className='font-bold text-[16px]'>
+                    ${courseItem?.pricing}
+                  </p>
                 </div>
               </div>
             ):
-            null
+            <h1>No Course found </h1>
           }
         </div>
       </section>

@@ -5,7 +5,7 @@ import { checkCoursePurchaseInfoService, fetchStudentViewCourseListService } fro
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Label } from "@radix-ui/react-label";
 import {  AspectRatio, Card, Checkbox, DropdownMenu, Flex, Skeleton, Text } from "@radix-ui/themes";
-import { Box, Heading } from "lucide-react";
+import { Heading } from "lucide-react";
 
 import { useContext, useEffect, useState } from "react";
 import {  useNavigate, useSearchParams } from "react-router-dom";
@@ -208,13 +208,13 @@ function StudentViewCoursesPage() {
 
               >
                 <Flex gap="4" p="4">
-                  <Box style={{ width: '12rem', flexShrink: 0 }}>
+                  <div style={{ width: '12rem', flexShrink: 0 }}>
                     <AspectRatio ratio={3/2}>
                       <img src={courseItem?.image}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover border rounded-lg"
                       />
                     </AspectRatio>
-                  </Box>
+                  </div>
                   
                   <Flex direction="column" style={{ flex: 1 }}>
                     <Heading size="4" mb="2">
