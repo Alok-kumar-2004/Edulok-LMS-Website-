@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const  axiosInstance = axios.create({
-    baseURL : 'https://edulok-lms-website.vercel.app/',
+    baseURL : 'https://edulok-lms-website.onrender.com',
 });
 
 axiosInstance.interceptors.request.use((config)=>{

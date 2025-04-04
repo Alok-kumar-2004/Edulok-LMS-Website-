@@ -16,20 +16,9 @@ const PORT = process.env.PORT || 5000;
 
 const MONGO_URI = process.env.MONGO_URI
 
-const allowedOrigins = [
-    "https://edulok-lms-website-mcvc.vercel.app",
-    "https://edulok-lms-website.vercel.app",
-    "http://localhost:5173" // Allow localhost for development
-];
 
 app.use(cors({
-    origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
+    origin: "*",
     methods: ["GET", "POST", "DELETE", "PUT"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
