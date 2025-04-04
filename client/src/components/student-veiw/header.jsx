@@ -27,7 +27,8 @@ function StudentViewCommonHeader() {
                         navigate('/courses')
                     }}
                     >
-                        Explore Courses
+                        Explore<br/>
+                        Courses
                     </Button>
                 </div>
             </div>
