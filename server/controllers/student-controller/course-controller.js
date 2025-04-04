@@ -92,8 +92,11 @@ const checkCoursePurchaseInfo = async (req,res)=>{
       const studentCourses = await StudentCourses.findOne({
         userId: studentId,
       });
-      const ifStudentAlreadyBoughtCourse =studentCourses ?
-        studentCourses.courses.findIndex((item) => item.courseId === id) : false;
+      // const ifStudentAlreadyBoughtCourse = 
+      //   studentCourses.courses.findIndex((item) => item.courseId === id) > -1;
+      const ifStudentAlreadyBoughtCourse = studentCourses 
+      ? studentCourses.courses.findIndex((item) => item.courseId === id) > -1
+      : false;
       res.status(200).json({
         success: true,
         data: ifStudentAlreadyBoughtCourse,

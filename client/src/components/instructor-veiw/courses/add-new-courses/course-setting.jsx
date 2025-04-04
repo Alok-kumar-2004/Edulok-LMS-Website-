@@ -1,5 +1,5 @@
 import { Button, Card, Text } from "@radix-ui/themes";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { InstructorContext } from "@/context/instructor-context";
 import { mediaDeleteService, mediaUploadService } from "@/services";
 import MediaProgressbar from "@/components/media-progress-bar";
@@ -12,9 +12,11 @@ function CourseSettings() {
     setMediaUploadProgress,
     mediaUploadProgressPercentage,
     setMediaUploadProgressPercentage,
-    // courseCurriculumFormData,
-    // setCourseCurriculumFormData
   } = useContext(InstructorContext);
+  
+  // Create a ref for the hidden file input for changing image
+  const fileInputRef = useRef(null);
+
   async function handleImageUploadChange(event) {
     const selectedImage = event.target.files[0];
     if (selectedImage) {
@@ -28,6 +30,11 @@ function CourseSettings() {
         );
         console.log(response);
         if (response.success) {
+          // If there was a previous image, delete it first
+          if (courseLandingFormData?.image) {
+            await handleDeletePreviousImage();
+          }
+          
           setCourseLandingFormData({
             ...courseLandingFormData,
             image: response.data.url,
@@ -36,30 +43,39 @@ function CourseSettings() {
         }
       } catch (error) {
         console.log(error);
+        setMediaUploadProgress(false);
       }
     }
   }
-  // async function handleImageEdit(currentIndex){
-  //       try {
-  //         let copycourseLandingFormData = [...courseLandingFormData];
-  //         const getCurrentImage = copycourseLandingFormData[currentIndex].image;
-          
-  //         const deleteCurrentMediaResponse = await mediaDeleteService(getCurrentImage);
-    
-  //         if (deleteCurrentMediaResponse?.success) {
-  //           copycourseLandingFormData[currentIndex] = {
-  //                 ...copycourseLandingFormData[currentIndex],
-  //                 videoUrl: "",
-  //                 public_id: "",
-  //             };
-  //             setCourseLandingFormData(copycourseLandingFormData);
-  //         } else {
-  //             console.error("Failed to delete photo");
-  //         }
-  //     } catch (error) {
-  //         console.error("Error replacing photo:", error);
-  //     }
-  // }
+
+  // Function to handle clicking the "Change Image" button
+  function handleChangeImageClick() {
+    // Trigger the hidden file input click
+    fileInputRef.current.click();
+  }
+
+  // Function to delete the previous image
+  async function handleDeletePreviousImage() {
+    try {
+      const imageUrl = courseLandingFormData.image;
+      // Extract the public_id from the Cloudinary URL
+      const urlParts = imageUrl.split('/');
+      const filenameWithExtension = urlParts[urlParts.length - 1];
+      const publicId = filenameWithExtension.split('.')[0];
+      
+      console.log("Deleting image with public_id:", publicId);
+      const deleteResponse = await mediaDeleteService(publicId);
+      
+      if (deleteResponse?.success) {
+        console.log("Previous image deleted successfully");
+      } else {
+        console.error("Failed to delete previous image");
+      }
+    } catch (error) {
+      console.error("Error deleting previous image:", error);
+    }
+  }
+
   return (
     <div>
       <Card className="p-6 shadow-md">
@@ -85,9 +101,17 @@ function CourseSettings() {
                 alt="Uploaded Course Image"
                 className="w-96 h-auto object-cover rounded-lg shadow-md"
               />
-              <Button variant="outline" className="mt-2">
+              <Button variant="outline" className="mt-2" onClick={handleChangeImageClick}>
                 Change Image
               </Button>
+              {/* Hidden file input for changing image */}
+              <input
+                ref={fileInputRef}
+                onChange={handleImageUploadChange}
+                type="file"
+                accept="image/*"
+                className="hidden"
+              />
             </div>
           ) : (
             <div className="flex flex-col gap-3">
@@ -107,7 +131,7 @@ function CourseSettings() {
                   id="course-image"
                   type="file"
                   accept="image/*"
-                  className="hidden "
+                  className="hidden"
                 />
               </label>
             </div>
