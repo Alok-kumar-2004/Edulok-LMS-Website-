@@ -11,6 +11,7 @@ const studentViewCourseRoutes = require('./routes/student-routes/course-routes')
 const studentViewOrderRoutes = require('./routes/student-routes/order-routes')
 const studentCoursesRoutes = require('./routes/student-routes/studentCourses-routes')
 const studentCourseProgressRoutes = require('./routes/student-routes/course-progress-routes')
+const path = require('path');
 
 const PORT = process.env.PORT || 5000;
 
@@ -36,6 +37,14 @@ app.use('/student/course',studentViewCourseRoutes)
 app.use('/student/order',studentViewOrderRoutes)
 app.use('/student/Courses-bought',studentCoursesRoutes)
 app.use('/student/course-progress',studentCourseProgressRoutes)
+
+
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// The "catch all" handler: for any request that doesn't match one above, send back React's index.html file
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
 
 app.use((err,req,res,next)=>{
     console.log(err.stack);
