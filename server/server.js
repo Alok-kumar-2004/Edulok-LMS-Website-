@@ -39,16 +39,16 @@ app.use('/student/Courses-bought',studentCoursesRoutes)
 app.use('/student/course-progress',studentCourseProgressRoutes)
 
 
-app.use(express.static(path.join(__dirname, './client/dist'))); // Vite builds to 'dist' not 'build'
+app.use(express.static(path.join(__dirname, '../client/dist'))); // Vite builds to 'dist' not 'build'
 
 // Add explicit route for payment-return
 app.get('/payment-return', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 // Update the catch-all handler
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './client/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 app.use((err,req,res,next)=>{
