@@ -226,6 +226,9 @@ function StudentViewCoursesPage() {
                         {courseItem?.instructorName}
                       </Text>
                     </Text>
+                    <Text weight="medium" size="3">
+                        {courseItem?.category}
+                    </Text>
                     <Text size="3" color="gray" mt="3" mb="2">
                       {`${courseItem?.curriculum?.length} ${
                         courseItem?.curriculum?.length <= 1
