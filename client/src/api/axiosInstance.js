@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const  axiosInstance = axios.create({
-    baseURL : 'https://edulok-lms-website-em87.onrender.com', 
+    baseURL : 'https://edulok-lms-website.onrender.com', 
     // baseURL : 'http://localhost:5000',
 });
 
