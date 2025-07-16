@@ -289,7 +289,7 @@ function StudentCoursesPage() {
             <Text size="3" color="gray">
               Time to start your learning journey!
             </Text>
-            <Button onClick={() => navigate("/explore-courses")}>
+            <Button onClick={() => navigate("/courses")}>
               Explore Courses
             </Button>
           </Flex>

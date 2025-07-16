@@ -23,6 +23,13 @@ function Auth() {
       signInFormData.userEmail !== "" && signInFormData.password !== "");
   }
 
+  function handleTabChangeAfterLogin(event){
+    event.preventDefault();
+    handleRegisterUser(event).then(()=>{
+      setActiveTab('signin')
+    })    
+  }
+
   function checkIfSignUpFormIsValid() {
     return (
       signUpFormData &&
@@ -89,6 +96,7 @@ function Auth() {
                       setFormData={setSignInFormData}
                       isButtonDisabled={!checkIfSignInFormIsValid()}
                       handleSubmit={handleLoginUser}
+              
                     />
                   </Flex>
                 </Card>
@@ -107,7 +115,7 @@ function Auth() {
                       formData={signUpFormData}
                       setFormData={setSignUpFormData}
                       isButtonDisabled={!checkIfSignUpFormIsValid()}
-                      handleSubmit={handleRegisterUser}
+                      handleSubmit={handleTabChangeAfterLogin}
                     />
                   </Flex>
                 </Card>
