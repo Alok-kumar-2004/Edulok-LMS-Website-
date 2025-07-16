@@ -6,7 +6,7 @@ function InstructorDashboard({ listOfCourses }) {
     {
       icon: UserCircle,
       label: "Total Students",
-      value: calculateTotalStudentsAndProfit().totalStudents,
+      value: calculateTotalStudentsAndProfit().totalStudents/2,
       description: "Active enrollments",
       color: "bg-blue-100 text-blue-600",
     },
@@ -40,12 +40,17 @@ function InstructorDashboard({ listOfCourses }) {
         acc.totalStudents += studentCount;
         acc.totalProfits += course.pricing * studentCount;
 
+        const studentSet = new Set()
         course.students.forEach(student => {
-          acc.studentList.push({
+          const uniqueKey = course.title + "|" + student.studentEmail
+          if(!studentSet.has(uniqueKey)){
+            acc.studentList.push({
             courseTitle: course.title,
             studentName: student.studentName,
             studentEmail: student.studentEmail,
           });
+          }
+          studentSet.add(uniqueKey)
         });
 
         return acc;
@@ -67,7 +72,7 @@ function InstructorDashboard({ listOfCourses }) {
   return (
     <div className="space-y-6">
       <Heading size="5" className="mb-4 text-center text-gray-800 font-bold text-3xl">
-        {/* Instructor Dashboard */}
+        {/* Instructor Dashboard */}Instructor Name - John Doe
       </Heading>
       
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

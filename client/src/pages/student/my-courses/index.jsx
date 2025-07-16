@@ -1,107 +1,3 @@
-// import { AuthContext } from "@/context/auth-context";
-// import { StudentContext } from "@/context/student-context";
-// import { fetchStudentBoughtCoursesService } from "@/services";
-// import { Button, Card, Container, Flex } from "@radix-ui/themes";
-// import { Heading, Play, Text } from "lucide-react";
-// import { useContext, useEffect } from "react";
-// function StudentCoursesPage() {
-//     const {auth} = useContext(AuthContext)
-//     const {studentBoughtCoursesList,setStudentBoughtCoursesList} = useContext(StudentContext)
-//     async function fetchStudentBoughtCourses(){
-//         const response = await fetchStudentBoughtCoursesService(auth?.user?._id)
-//         console.log(response);
-
-//         if(response?.success){
-//             setStudentBoughtCoursesList(response?.data)
-//         }
-//     }
-//     useEffect(()=>{
-//         fetchStudentBoughtCourses()
-//     },[])
-//     return (
-//         <Container size="4" style={{ padding: "24px" }}>
-//         <Heading size="6" style={{ fontSize: "1.875rem", fontWeight: "bold", marginBottom: "32px" }}>
-//             My Courses
-//         </Heading>
-        
-//         <Flex wrap="wrap" gap="5" style={{ 
-//             display: "grid", 
-//             gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-//             gap: "20px" 
-//         }}>
-//             {studentBoughtCoursesList && studentBoughtCoursesList.length > 0 ? (
-//                 studentBoughtCoursesList.map((course) => (
-//                     <Card key={course.id} style={{ 
-//                         display: "flex", 
-//                         flexDirection: "column",
-//                         overflow: "hidden",
-//                         transition: "transform 0.2s ease, box-shadow 0.2s ease",
-//                         cursor: "pointer"
-//                     }}
-//                     className="course-card"
-//                     >
-//                         <div style={{ padding: "16px", flexGrow: 1 }}>
-//                             <div style={{ overflow: "hidden", borderRadius: "8px", marginBottom: "16px" }}>
-//                                 <img
-//                                     src={course?.courseImage}
-//                                     alt={course?.title}
-//                                     style={{ 
-//                                         height: "208px", 
-//                                         width: "100%", 
-//                                         objectFit: "cover",
-//                                         transition: "transform 0.3s ease"
-//                                     }}
-//                                     className="course-image"
-//                                 />
-//                             </div>
-//                             <Heading size="3" style={{ fontWeight: "bold", marginBottom: "4px" }}>
-//                                 {course?.title}
-//                             </Heading>
-//                             <Text size="2" color="gray" style={{ marginBottom: "8px" }}>
-//                                 {course?.instructorName}
-//                             </Text>
-//                         </div>
-                        
-//                         <div style={{ 
-//                             padding: "16px", 
-//                             borderTop: "1px solid var(--gray-a4)", 
-//                             backgroundColor: "var(--gray-a2)"
-//                         }}>
-//                             <Button 
-//                                 size="3"
-//                                 style={{ width: "100%" }}
-//                                 // onClick={() => navigate(`/course-progress/${course?.courseId}`)}
-//                             >
-//                                 <Flex align="center" gap="2">
-//                                     <Play size={16} />
-//                                     <span>Start Watching</span>
-//                                 </Flex>
-//                             </Button>
-//                         </div>
-//                     </Card>
-//                 ))
-//             ) : (
-//                 <Flex align="center" justify="center" style={{ gridColumn: "1/-1", padding: "40px" }}>
-//                     <Heading size="6" style={{ fontWeight: "bold" }}>No Courses found</Heading>
-//                 </Flex>
-//             )}
-//         </Flex>
-
-//         {/* Add this style tag to your component */}
-//         <style>{`
-//             .course-card:hover {
-//                 transform: translateY(-4px);
-//                 box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-//             }
-//             .course-card:hover .course-image {
-//                 transform: scale(1.05);
-//             }
-//         `}</style>
-//     </Container>
-//     );
-// }
-
-// export default StudentCoursesPage;
 
 import { AuthContext } from "@/context/auth-context";
 import { StudentContext } from "@/context/student-context";
@@ -157,7 +53,7 @@ function StudentCoursesPage() {
         ) : studentBoughtCoursesList && studentBoughtCoursesList.length > 0 ? (
           <ScrollArea>
             <Flex gap="5" wrap="wrap" justify="center">
-              {studentBoughtCoursesList.map((course) => (
+              { [...new Map(studentBoughtCoursesList.map(c=>[c.courseId,c])).values()].map(course =>
                 <Card
                   key={course.id}
                   style={{
@@ -272,7 +168,7 @@ function StudentCoursesPage() {
                     </Button>
                   </Flex>
                 </Card>
-              ))}
+              )}
             </Flex>
           </ScrollArea>
         ) : (
