@@ -6,7 +6,7 @@ function InstructorDashboard({ listOfCourses }) {
     {
       icon: UserCircle,
       label: "Total Students",
-      value: calculateTotalStudentsAndProfit().totalStudents/2,
+      value: Math.ceil(calculateTotalStudentsAndProfit().totalStudents/2),
       description: "Active enrollments",
       color: "bg-blue-100 text-blue-600",
     },
@@ -100,7 +100,7 @@ function InstructorDashboard({ listOfCourses }) {
         <div className="p-5 pb-3 flex justify-between items-center">
           <Heading size="4" className="font-bold">Students Enrolled</Heading>
           <Text size="2" className="text-gray-500">
-            {calculateTotalStudentsAndProfit().totalStudents} total students
+            {Math.ceil(calculateTotalStudentsAndProfit().totalStudents/2)} total students
           </Text>
         </div>
         
